@@ -1,32 +1,30 @@
-#ifndef __HOLBERTON_H__
-#define __HOLBERTON_H__
+#ifndef _HOLBERTON_
+#define _HOLBERTON_
 
+#include <unistd.h>
 #include <stdarg.h>
-#include <stdlib.h>
+#include <stdio.h>
+#include <limits.h>
 
 /**
- * struct printer - format printer struct
- * @spec: the format specifier
- * @fn: the function that handles spec
- */
-typedef struct printer
+* struct op - flag / function object
+* @c: flag
+* @f: function
+*/
+
+typedef struct op
 {
-	char *spec;
-	int (*fn)(va_list);
-} print_t;
+	char *c;
+	int (*f)(va_list);
+} op_t;
 
-int _putchar(char c);
 int _printf(const char *format, ...);
-int print_char(va_list ap);
-int print_string(va_list ap);
-int print_space(va_list ap);
-int print_int(va_list ap);
-int print_unsigned(va_list ap);
-int print_octal(va_list ap);
-int print_digit(int num, int *count);
-int print_unsigned_digit(unsigned int num, int *count);
-int print_digit_octal(unsigned int num, int *count);
-int call_print_fn(char ch, va_list ap);
+int _putchar(char c);
+int print_c(va_list ar_list);
+int (*get_func(char s))(va_list ar_list);
+int print_s(va_list ar_list);
+int print_d(va_list ar_list);
+int print_i(va_list ar_numlist);
+int print_b(va_list binary_list);
 
-
-#endif /* __HOLBERTON_H__ */
+#endif
