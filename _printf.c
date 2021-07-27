@@ -1,49 +1,72 @@
 #include "holberton.h"
+#include "funcs_array.h"
+
 /**
-  * _printf - function that prints based on format specifier
-  * @format: takes in format specifier
-  * Return: return pointer to index
-  */
+ * _printf - prints to stdout according to a format string
+ * @format: constant string containing zero or more directives
+ * Return: int number of characters printed (excluding terminating null-byte)
+ */
 int _printf(const char *format, ...)
 {
-	char buffer[1024];
-	int i, j = 0, a = 0, *index = &a;
-	va_list valist;
-	vtype_t spec[] = {
-		{'c', format_c}, {'d', format_d}, {'s', format_s}, {'i', format_d},
-		{'u', format_u}, {'%', format_perc}, {'x', format_h}, {'X', format_ch},
-		{'o', format_o}, {'b', format_b}, {'p', format_p}, {'r', format_r},
-		{'R', format_R}, {'\0', NULL}
-	};
-	if (!format)
+	int i, count = 0;
+	va_list ap;
+
+	va_start(ap, format);
+
+	if (format == NULL)
 		return (-1);
-	va_start(valist, format);
+
 	for (i = 0; format[i] != '\0'; i++)
 	{
-		for (; format[i] != '%' && format[i] != '\0'; *index += 1, i++)
+		if (format[i] != '%')
 		{
-			if (*index == 1024)
-			{	_write_buffer(buffer, index);
-				reset_buffer(buffer);
-				*index = 0;
-			}
-			buffer[*index] = format[i];
+			count += _putchar(format[i]);
+			continue;
 		}
-		if (format[i] == '\0')
+		switch (format[++i])
+		{
+		case '%':
+			count += _putchar('%');
 			break;
-		if (format[i] == '%')
-		{	i++;
-			for (j = 0; spec[j].tp != '\0'; j++)
-			{
-				if (format[i] == spec[j].tp)
-				{	spec[j].f(valist, buffer, index);
-					break;
-				}
-			}
+		case 'c':
+		case 's':
+		case 'd':
+		case 'i':
+		case 'u':
+		case 'o':
+			count += call_print_fn(format[i], ap);
+			break;
+		default:
+			if (!format[i])
+				return (-1);
+			count += _putchar('%');
+			count += _putchar(format[i]);
+			break;
 		}
 	}
-	va_end(valist);
-	buffer[*index] = '\0';
-	_write_buffer(buffer, index);
-	return (*index);
+	va_end(ap);
+	return (count);
+}
+
+
+/**
+ * call_print_fn - call appropriate print fn
+ * @ch: format string character
+ * @ap: object to be printed
+ * Return: number of characters printed
+ */
+int call_print_fn(char ch, va_list ap)
+{
+	int j;
+	int count = 0;
+
+	for (j = 0; funcs[j].spec != NULL; j++)
+	{
+		if (ch == funcs[j].spec[0])
+		{
+			count += funcs[j].fn(ap);
+			break;
+		}
+	}
+	return (count);
 }
