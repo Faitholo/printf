@@ -1,8 +1,5 @@
 # Printf
 
-## Synopsis
-This is a simple implementation of printf function that formats and prints data
-
 ## Description
 The _printf() function produces output according to a format which is described
 below. This function write its output to the stdout, the standard output. Returns the count of printed characters when the function is successful
@@ -21,3 +18,4 @@ The available convertion specifiers are:
 + All the files are to be compiled on Ubuntu 20.04 LTS using gcc, using the options -Wall -Werror -Wextra -pedantic -std=gnu89
 + Include the "holberton.h" header file on the functions using the _printf()
 
+This is a group project by Firduas Hassan (github.com/firduashassansalim) and Faith Ikhidero
